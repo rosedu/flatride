@@ -15,8 +15,15 @@
           "mapTypeId" window/google.maps.MapTypeId.ROADMAP
           "center" (window/google.maps.LatLng. 45 45)))
 
-(defn display-routes [& args]
-  (log args))
+(def stroke-colors ["red" "green" "blue"])
+
+(defn display-routes [args]
+  (doseq [idx (range (->> args .-routes .-length))]
+    (let [directionsDisplay (window/google.maps.DirectionsRenderer.
+            (js-obj "polylineOptions" (js-obj "strokeColor" (stroke-colors idx))))]
+      (.setMap directionsDisplay *mapInstance*)
+      (.setDirections directionsDisplay args)
+      (.setRouteIndex directionsDisplay idx))))
 
 
 (defn get-routes []
@@ -28,9 +35,10 @@
   (set! gautocomplete-from (window/google.maps.places.Autocomplete. (sel1 :#input-from)))
   (set! gautocomplete-to (window/google.maps.places.Autocomplete. (sel1 :#input-to))))
 
+(def *mapInstance* nil)
 (defn init []
   (init-autocomplete)
-  (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj))
+  (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj)))
   (dommy/listen! (sel1 :#button-submit) :click get-routes)
   )
 
