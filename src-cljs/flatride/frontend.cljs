@@ -1,9 +1,11 @@
 (ns flatride.frontend
     (:use-macros
         [dommy.macros :only [node sel sel1]])
-    (:use [flatride.utils :only [log]])
+    (:use [flatride.utils :only [log slope-diff]])
     (:require
         [flatride.core :as core]
+        [goog.string :as gstring]
+        [goog.string.format]
         [dommy.core :as dommy]))
 
 
