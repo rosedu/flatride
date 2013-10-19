@@ -1,6 +1,7 @@
 (ns flatride.frontend
     (:use-macros
         [dommy.macros :only [node sel sel1]])
+    (:use [flatride.utils :only [log]])
     (:require
         [flatride.core :as core]
         [dommy.core :as dommy]))
@@ -14,10 +15,14 @@
           "mapTypeId" window/google.maps.MapTypeId.ROADMAP
           "center" (window/google.maps.LatLng. 45 45)))
 
+(defn display-routes [& args]
+  (log args))
+
+
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
         to (dommy/value (sel1 :#input-to))]
-    (core/compute-routes from to)))
+    (core/start-compute-routes from to display-routes)))
 
 (defn init-autocomplete []
   (set! gautocomplete-from (window/google.maps.places.Autocomplete. (sel1 :#input-from)))

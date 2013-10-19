@@ -10,9 +10,14 @@
           "destination" to
           "travelMode" window/google.maps.DirectionsTravelMode.WALKING))
 
-(defn compute-routes [from to]
+(defn start-compute-routes [from to display-fn]
   (let [req-obj (directions-config-obj from to)]
-    (log req-obj)
-    (.route (window/google.maps.DirectionsService.) req-obj log)
-    ))
+    (.route (window/google.maps.DirectionsService.)
+            req-obj
+            (partial process-routes display-fn))))
+
+(defn process-routes [display-fn routes status]
+  ; when no bike available fall back to car TODO
+  (log routes)
+  (display-fn {}))
 
