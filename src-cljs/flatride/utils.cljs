@@ -11,8 +11,8 @@
 
 (defn gps-distance [from to]
   (let [R 6371
-        dLat (- (:lat to) (:lat from))
-        dLon (- (:lng to) (:lng from))
+        dLat (toRad (- (:lat to) (:lat from)))
+        dLon (toRad (- (:lng to) (:lng from)))
         lat1 (toRad (:lat from))
         lat2 (toRad (:lat to))
         a (+ (* (Math/sin (/ dLat 2))
@@ -28,3 +28,4 @@
              (Math/atan2 (Math/sqrt a) (Math/sqrt (- 1 a))))
         ]
     (* R c)))
+
