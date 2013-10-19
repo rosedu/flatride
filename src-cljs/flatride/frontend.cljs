@@ -1,7 +1,8 @@
 (ns flatride.frontend
     (:use-macros
         [dommy.macros :only [node sel sel1]])
-    (:use [flatride.utils :only [log slope-diff gps-distance]])
+    (:use [flatride.utils :only [log slope-diff
+                                 slope-total-distance]])
     (:require
         [flatride.core :as core]
         [goog.string :as gstring]
@@ -39,8 +40,8 @@
                            steepest-slope :steepest-slope}]
   (let [div (nth (sel :div.routeData) idx)]
     (dommy/append! div (node [:span (->> steepest-slope slope-diff (gstring/format "%.2f"))]))
-    (dommy/append! div (node [:span "    LOLOLOL     "]))
-    (dommy/append! div (node [:span (->> (gps-distance (:coordinates (first steepest-slope)) (:coordinates (last steepest-slope))) (gstring/format "%.2f"))]))))
+    (dommy/append! div (node [:span "    total distance:     "]))
+    (dommy/append! div (node [:span (->> steepest-slope slope-total-distance (gstring/format "%.2f"))]))))
 
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
@@ -55,8 +56,7 @@
 (defn init []
   (init-autocomplete)
   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj)))
-  (dommy/listen! (sel1 :#button-submit) :click get-routes)
-  )
+  (dommy/listen! (sel1 :#button-submit) :click get-routes)))
 
 (set! (.-onload js/window) init)
 
