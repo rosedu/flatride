@@ -19,13 +19,14 @@
 
 (defn increasing-seqs [coll]
   "Vector of subvectors of coll that are increasing"
-  (reductions
-    (fn [current-seq next-elem]
-      (if (>= next-elem (last current-seq))
-        (conj current-seq next-elem)
-        [next-elem]))
-    [(first coll)]
-    (rest coll)))
+  (filter #(> (count %) 1)
+          (reductions
+            (fn [current-seq next-elem]
+              (if (>= next-elem (last current-seq))
+                (conj current-seq next-elem)
+                [next-elem]))
+            [(first coll)]
+            (rest coll))))
 
 (defn longest-seq [seqs]
   "Longest seq within seqs"
