@@ -34,10 +34,16 @@
       (.setDirections directionsDisplay (:to-display routes-data))
       (.setRouteIndex directionsDisplay idx))))
 
+(defn display-elevations [{idx :idx
+                           longest-slope :longest-slope
+                           steepest-slope :steepest-slope}]
+  (let [div (nth (sel :div.routeData) idx)]
+    (dommy/append! div (node [:span (->> steepest-slope slope-diff (gstring/format "%.2f"))]))))
+
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
         to (dommy/value (sel1 :#input-to))]
-    (core/start-compute-routes from to display-routes)))
+    (core/start-compute-routes from to display-routes display-elevations)))
 
 (defn init-autocomplete []
   (set! gautocomplete-from (window/google.maps.places.Autocomplete. (sel1 :#input-from)))

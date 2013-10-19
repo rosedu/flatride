@@ -12,10 +12,10 @@
           "provideRouteAlternatives" true
           "travelMode" window/google.maps.DirectionsTravelMode.DRIVING))
 
-(defn start-compute-routes [from to display-fn]
+(defn start-compute-routes [from to display-route-fn display-elev-fn]
   (let [req-obj (directions-config-obj from to)
         ds (window/google.maps.DirectionsService.)]
-    (.route ds req-obj (partial process-routes display-fn))))
+    (.route ds req-obj (partial process-routes display-route-fn display-elev-fn))))
 
 (defn increasing-seqs [coll]
   "Vector of subvectors of coll that are increasing"
@@ -36,14 +36,22 @@
   "Highest sum seq within seqs"
   (apply max-key #(- (last %) (first %)) seqs))
 
-(defn process-elevation-data [elevations status]
-  (log elevations)
-  )
+(defn process-elevation-data [display-elev-fn idx elevations status]
+  (let [elevations (map #(.-elevation %) elevations)
+        slopes (increasing-seqs elevations)
+        longest-slope (longest-seq slopes)
+        steepest-slope (greatest-diff-seq slopes)]
+    (display-elev-fn {
+                      :idx idx
+                      :longest-slope longest-slope
+                      :steepest-slope steepest-slope})))
 
-(defn start-compute-elevation-data [route]
+(defn start-compute-elevation-data [route idx display-elev-fn]
   (let [es (window/google.maps.ElevationService.)
-        path-req (js-obj "path" route "samples" 200)]
-    (.getElevationAlongPath path-req process-elevation-data)))
+        path-req (js-obj "path" (.-overview_path route) "samples" 200)]
+    (.getElevationAlongPath es
+                            path-req
+                            (partial process-elevation-data display-elev-fn idx))))
 
 (defn parse-route [route]
   ;; route.legs[0].distance // .duration
@@ -53,9 +61,10 @@
      :duration (->> route-info .-duration .-text)
      }))
 
-(defn process-routes [display-fn routes status]
-  ; when no bike available fall back to car TODO
-  (display-fn {
+(defn process-routes [display-route-fn display-elev-fn routes status]
+  (doseq [idx (range (->> routes .-routes .-length))]
+    (start-compute-elevation-data (nth (.-routes routes) idx) idx display-elev-fn))
+  (display-route-fn {
                :to-display routes
                :routes-data (map parse-route (.-routes routes))}))
 
