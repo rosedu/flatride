@@ -27,7 +27,10 @@
 
 (defn init []
   (init-autocomplete)
-  (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj)))
+  (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj))
+  (log window/google.maps.DirectionsService)
+  (dommy/listen! (sel1 :#button-submit) :click get-routes)
+  )
 
 (set! (.-onload js/window) init)
 

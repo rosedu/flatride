@@ -1,8 +1,16 @@
 (ns flatride.core
   (:use-macros
     [dommy.macros :only [node sel sel1]])
+  (:use [flatride.frontend :only [log]])
   (:require
     [dommy.core :as dommy]))
 
-(dommy/append! (sel1 :body) (node [:p "Helloes"]))
+(defn directions-config-obj [from to]
+  (js-obj "origin" from
+          "destination" to
+          "travelMode" window/google.maps.DirectionsTravelMode.BICYCLING))
+
+(defn compute-routes [from to]
+  (let [req-obj (directions-config-obj from to)]
+    (log req-obj)))
 
