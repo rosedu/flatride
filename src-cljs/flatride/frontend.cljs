@@ -5,6 +5,9 @@
         [dommy.core :as dommy]
         [flatride.core :as core]))
 
+(defn log [stuff]
+  (.log js/console stuff))
+
 (def gautocomplete-from nil)
 (def gautocomplete-to nil)
 
