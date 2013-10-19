@@ -17,14 +17,20 @@
 
 (def stroke-colors ["red" "green" "blue"])
 
-(defn display-routes [args]
-  (doseq [idx (range (->> args .-routes .-length))]
+(defn display-routes [routes-data]
+  (doseq [route (:routes-data routes-data)]
+    (dommy/append! (sel1 :#div-routes-display)
+                   (node [:div.routeData
+                          [:p (:duration route)]
+                          [:p (:distance route)]])))
+
+  ; plot the directions on the map
+  (doseq [idx (range (->> (:to-display routes-data) .-routes .-length))]
     (let [directionsDisplay (window/google.maps.DirectionsRenderer.
             (js-obj "polylineOptions" (js-obj "strokeColor" (stroke-colors idx))))]
       (.setMap directionsDisplay *mapInstance*)
-      (.setDirections directionsDisplay args)
+      (.setDirections directionsDisplay (:to-display routes-data))
       (.setRouteIndex directionsDisplay idx))))
-
 
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
