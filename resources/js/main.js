@@ -25095,8 +25095,19 @@ goog.provide("flatride.core");
 goog.require("cljs.core");
 goog.require("dommy.core");
 goog.require("dommy.core");
-dommy.core.append_BANG_.cljs$core$IFn$_invoke$arity$2(document.body, function() {
+dommy.core.append_BANG_.call(null, document.body, function() {
   var dom5604 = document.createElement("p");
   dom5604.appendChild(document.createTextNode("Helloes"));
   return dom5604
+}());
+goog.provide("flatride.frontend");
+goog.require("cljs.core");
+goog.require("flatride.core");
+goog.require("flatride.core");
+goog.require("dommy.core");
+goog.require("dommy.core");
+dommy.core.append_BANG_.call(null, document.body, function() {
+  var dom5605 = document.createElement("p");
+  dom5605.appendChild(document.createTextNode("Helloes"));
+  return dom5605
 }());
