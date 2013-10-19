@@ -15,10 +15,10 @@
   ;; route.legs[0].distance // .duration
   (let [route-info (nth (.-legs route) 0)]
     {
-      :distance (->> route-info .-distance .-text)
-      :duration (->> route-info .-duration .-text)
-      :path-obj route
-    }))
+     :distance (->> route-info .-distance .-text)
+     :duration (->> route-info .-duration .-text)
+     :path-obj route
+     }))
 
 (defn start-compute-routes [from to display-fn]
   (let [req-obj (directions-config-obj from to)
