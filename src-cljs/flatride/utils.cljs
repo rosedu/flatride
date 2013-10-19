@@ -4,5 +4,5 @@
   (.log js/console stuff))
 
 (defn slope-diff [seq]
-    (- (last seq) (first seq)))
+    (- (:altitude (last seq)) (:altitude (first seq))))
 

@@ -22,7 +22,7 @@
   (filter #(> (count %) 1)
           (reductions
             (fn [current-seq next-elem]
-              (if (>= next-elem (last current-seq))
+              (if (>= (:altitude next-elem) (:altitude (last current-seq)))
                 (conj current-seq next-elem)
                 [next-elem]))
             [(first coll)]
@@ -34,11 +34,16 @@
 
 (defn greatest-diff-seq [seqs]
   "Highest sum seq within seqs"
-  (apply max-key #(- (last %) (first %)) seqs))
+  (apply max-key #(- (:altitude (last %)) (:altitude (first %))) seqs))
 
-(defn process-elevation-data [display-elev-fn idx elevations status]
-  (let [elevations (map #(.-elevation %) elevations)
-        slopes (increasing-seqs elevations)
+(defn process-elevation-data [display-elev-fn idx elevation-data status]
+  (let [elevations (map #(.-elevation %) elevation-data)
+        coordinates (map #(.-location %) elevation-data)
+        elev-objs (for [idx (range (count elevations))]
+                    {:altitude (nth elevations idx)
+                     :coordinates {:lat (.lat (nth coordinates idx))
+                                   :lng (.lng (nth coordinates idx))}})
+        slopes (increasing-seqs elev-objs)
         longest-slope (longest-seq slopes)
         steepest-slope (greatest-diff-seq slopes)]
     (display-elev-fn {
