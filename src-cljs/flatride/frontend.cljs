@@ -2,11 +2,9 @@
     (:use-macros
         [dommy.macros :only [node sel sel1]])
     (:require
-        [dommy.core :as dommy]
-        [flatride.core :as core]))
+        [flatride.core :as core]
+        [dommy.core :as dommy]))
 
-(defn log [stuff]
-  (.log js/console stuff))
 
 (def gautocomplete-from nil)
 (def gautocomplete-to nil)
@@ -28,7 +26,6 @@
 (defn init []
   (init-autocomplete)
   (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj))
-  (log window/google.maps.DirectionsService)
   (dommy/listen! (sel1 :#button-submit) :click get-routes)
   )
 

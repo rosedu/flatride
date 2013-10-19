@@ -1,7 +1,7 @@
 (ns flatride.core
   (:use-macros
     [dommy.macros :only [node sel sel1]])
-  (:use [flatride.frontend :only [log]])
+  (:use [flatride.utils :only [log]])
   (:require
     [dommy.core :as dommy]))
 
