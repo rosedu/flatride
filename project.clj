@@ -9,7 +9,7 @@
                         :source-paths ["src-cljs"]
                         :compiler {
                                    :output-to "resources/js/main.js"
-                                   :source-map "resources/js/main.js.map"
+                                   ;:source-map "resources/js/main.js.map"
                                    :optimizations :whitespace
                                    :pretty-print true}}]}
 
