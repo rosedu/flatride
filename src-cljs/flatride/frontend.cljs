@@ -23,9 +23,10 @@
 (defn display-routes [routes-data]
   (doseq [route (:routes-data routes-data)]
     (dommy/append! (sel1 :#div-routes-display)
-                   (node [:div.routeData
-                          [:p (:duration route)]
-                          [:p (:distance route)]])))
+                   (node [:div.route-data
+                          [:ul.route-card
+                           [:li [:strong "distance"] (:distance route)]
+                           [:li [:strong "duration"] (:duration route)]]])))
 
   ; plot the directions on the map
   (doseq [idx (range (->> (:to-display routes-data) .-routes .-length))]
@@ -38,10 +39,15 @@
 (defn display-elevations [{idx :idx
                            longest-slope :longest-slope
                            steepest-slope :steepest-slope}]
-  (let [div (nth (sel :div.routeData) idx)]
-    (dommy/append! div (node [:span (->> steepest-slope slope-diff (gstring/format "%.2f"))]))
-    (dommy/append! div (node [:span "    total distance:     "]))
-    (dommy/append! div (node [:span (->> steepest-slope slope-total-distance (gstring/format "%.2f"))]))))
+  (let [ul (nth (sel :ul.route-card) idx)]
+    (dommy/append! ul (node [:li [:strong "longest slope"]
+                             [:ul
+                              [:li [:strong "slope %"] (->> longest-slope slope-diff (gstring/format "%.2f"))]
+                              [:li [:strong "distance"] (->> longest-slope slope-total-distance (gstring/format "%.2f"))]]]))
+    (dommy/append! ul (node [:li [:strong "steepest slope"]
+                             [:ul
+                              [:li [:strong "slope %"] (->> steepest-slope slope-diff (gstring/format "%.2f"))]
+                              [:li [:strong "distance"] (->> steepest-slope slope-total-distance (gstring/format "%.2f"))]]]))))
 
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
@@ -56,7 +62,7 @@
 (defn init []
   (init-autocomplete)
   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj)))
-  (dommy/listen! (sel1 :#button-submit) :click get-routes)))
+  (dommy/listen! (sel1 :#button-submit) :click get-routes))
 
 (set! (.-onload js/window) init)
 
