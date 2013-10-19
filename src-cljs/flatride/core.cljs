@@ -8,9 +8,11 @@
 (defn directions-config-obj [from to]
   (js-obj "origin" from
           "destination" to
-          "travelMode" window/google.maps.DirectionsTravelMode.BICYCLING))
+          "travelMode" window/google.maps.DirectionsTravelMode.WALKING))
 
 (defn compute-routes [from to]
   (let [req-obj (directions-config-obj from to)]
-    (log req-obj)))
+    (log req-obj)
+    (.route (window/google.maps.DirectionsService.) req-obj log)
+    ))
 
