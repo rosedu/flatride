@@ -38,7 +38,9 @@
                            longest-slope :longest-slope
                            steepest-slope :steepest-slope}]
   (let [div (nth (sel :div.routeData) idx)]
-    (dommy/append! div (node [:span (->> steepest-slope slope-diff (gstring/format "%.2f"))]))))
+    (dommy/append! div (node [:span (->> steepest-slope slope-diff (gstring/format "%.2f"))]))
+    (dommy/append! div (node [:span "    LOLOLOL     "]))
+    (dommy/append! div (node [:span (->> (gps-distance (:coordinates (first steepest-slope)) (:coordinates (last steepest-slope))) (gstring/format "%.2f"))]))))
 
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
