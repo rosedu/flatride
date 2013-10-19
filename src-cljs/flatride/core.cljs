@@ -21,10 +21,38 @@
     }))
 
 (defn start-compute-routes [from to display-fn]
-  (let [req-obj (directions-config-obj from to)]
-    (.route (window/google.maps.DirectionsService.)
-            req-obj
-            (partial process-routes display-fn))))
+  (let [req-obj (directions-config-obj from to)
+        ds (window/google.maps.DirectionsService.)]
+    (.route ds req-obj (partial process-routes display-fn))))
+
+(defn increasing-seqs [coll]
+  "Vector of subvectors of coll that are increasing"
+  (reductions
+    (fn [current-seq next-elem]
+      (if (>= next-elem (last current-seq))
+        (conj current-seq next-elem)
+        [next-elem]))
+    [(first coll)]
+    (rest coll)))
+
+(defn longest-seq [seqs]
+  "Longest seq within seqs"
+  (reduce #(if (>= (count %1) (count %2)) %1 %2) [] seqs))
+
+(defn greatest-sum-seq [seqs]
+  "Highest sum seq within seqs"
+  (apply max-key #(reduce + %) seqs))
+
+(defn process-elevation-data [elevations status]
+  (log elevations)
+  )
+
+(defn start-compute-elevation-data [route]
+  (let [es (window/google.maps.ElevationService.)
+        path-req (js-obj "path" route "samples" 200)]
+    (.getElevationAlongPath path-req process-elevation-data)))
+
+
 
 (defn process-routes [display-fn routes status]
   ; when no bike available fall back to car TODO
