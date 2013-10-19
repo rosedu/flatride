@@ -9,8 +9,8 @@
 
 (defn map-config-obj []
   (js-obj "zoom" 12
-                "mapTypeId" gmaps.MapTypeId.ROADMAP
-                "center" (gmaps.LatLng. 45 45)))
+          "mapTypeId" gmaps.MapTypeId.ROADMAP
+          "center" (gmaps.LatLng. 45 45)))
 
 (defn init []
   (set! gmaps window/google.maps)
