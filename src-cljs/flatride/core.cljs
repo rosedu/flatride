@@ -32,9 +32,9 @@
   "Longest seq within seqs"
   (reduce #(if (>= (count %1) (count %2)) %1 %2) [] seqs))
 
-(defn greatest-sum-seq [seqs]
+(defn greatest-diff-seq [seqs]
   "Highest sum seq within seqs"
-  (apply max-key #(reduce + %) seqs))
+  (apply max-key #(- (last %) (first %)) seqs))
 
 (defn process-elevation-data [elevations status]
   (log elevations)
