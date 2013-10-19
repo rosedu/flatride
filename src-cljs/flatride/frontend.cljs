@@ -1,7 +1,7 @@
 (ns flatride.frontend
     (:use-macros
         [dommy.macros :only [node sel sel1]])
-    (:use [flatride.utils :only [log slope-diff]])
+    (:use [flatride.utils :only [log slope-diff gps-distance]])
     (:require
         [flatride.core :as core]
         [goog.string :as gstring]
