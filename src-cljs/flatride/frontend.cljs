@@ -2,7 +2,8 @@
     (:use-macros
         [dommy.macros :only [node sel sel1]])
     (:use [flatride.utils :only [log slope-diff
-                                 slope-total-distance]])
+                                 slope-total-distance
+                                 slope-percent]])
     (:require
         [flatride.core :as core]
         [goog.string :as gstring]
@@ -42,11 +43,11 @@
   (let [ul (nth (sel :ul.route-card) idx)]
     (dommy/append! ul (node [:li [:strong "longest slope"]
                              [:ul
-                              [:li [:strong "slope %"] (->> longest-slope slope-diff (gstring/format "%.2f"))]
+                              [:li [:strong "slope"] (->> longest-slope slope-percent (gstring/format "%.2f%%"))]
                               [:li [:strong "distance"] (->> longest-slope slope-total-distance (gstring/format "%.2f"))]]]))
     (dommy/append! ul (node [:li [:strong "steepest slope"]
                              [:ul
-                              [:li [:strong "slope %"] (->> steepest-slope slope-diff (gstring/format "%.2f"))]
+                              [:li [:strong "slope"] (->> steepest-slope slope-percent (gstring/format "%.2f%%"))]
                               [:li [:strong "distance"] (->> steepest-slope slope-total-distance (gstring/format "%.2f"))]]]))))
 
 (defn get-routes []

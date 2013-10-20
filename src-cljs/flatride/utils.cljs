@@ -36,3 +36,8 @@
                      (:coordinates (second elev-objs)))
        (slope-total-distance (rest elev-objs)))))
 
+(defn slope-percent [elev-objs]
+  (let [rise (- (:altitude (last elev-objs)) (:altitude (first elev-objs)))
+        run (* 1000 (slope-total-distance elev-objs))] ; km -> m
+    (* 100 (/ rise run))))
+

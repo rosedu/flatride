@@ -53,7 +53,7 @@
 
 (defn start-compute-elevation-data [route idx display-elev-fn]
   (let [es (window/google.maps.ElevationService.)
-        path-req (js-obj "path" (.-overview_path route) "samples" 250)]
+        path-req (js-obj "path" (.-overview_path route) "samples" 300)]
     (.getElevationAlongPath es
                             path-req
                             (partial process-elevation-data display-elev-fn idx))))
