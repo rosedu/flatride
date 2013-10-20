@@ -3,37 +3,38 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1,width=device-width,user-scalable=no">
     <title>Flatride</title>
-      <link rel="stylesheet" href="css/normalize.css">
-      <link rel="stylesheet" href="css/foundation.min.css">
-      <link rel="stylesheet" href="css/main.css">
-    </head>
-    <body>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/foundation.min.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
 
-      <div class="row">
-        <header>
-          <img src="img/bike.svg" class="img-logo">
-          <h1 class="title-logo">Flatride</h1>
-        </header>
+    <div class="row">
+      <header>
+      <img src="img/bike.svg" class="img-logo">
+      <h1 class="title-logo">Flatride</h1>
+      </header>
 
-        <div class="small-12 large-9 large-centered columns spacer-top">
-          <input id="input-from" value="Politehnica, Iuliu Maniu Avenue, Bucharest, Romania" class="input-userlocation">
-          <input id="input-to" value="Brăila, Romania" class="input-userlocation">
-          <button id="button-submit" class="large button expand">Ride!</button>
-        </div>
-
-        <div class="small-12 large-9 small-centered large-centered columns">
-        <div id="div-map-canvas" class="google-map">
-        </div>
+      <div class="small-12 large-9 large-centered columns spacer-top">
+        <input id="input-from" value="Politehnica, Bucharest, Romania" class="input-userlocation"> 
+        <input id="input-to" value="Brăila, Romania" class="input-userlocation">
+        <button id="button-submit" class="large button expand">Ride!</button>
       </div>
+    </div>
 
+    <div class="row">
+      <div class="small-12 large-9 small-centered large-centered columns">
+        <div id="div-map-canvas" class="google-map"></div>
+      </div>
+    </div>
+    <div class="row">
       <div class="small-12 large-9 small-centerd large-centered columns">
-        <div id="div-routes-display">
-        </div>
+        <div id="div-routes-display"></div>
       </div>
-      </div>
+    </div>
 
-        <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
-        <script src="js/main.js"></script>
-    </body>
+    <script src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>
 

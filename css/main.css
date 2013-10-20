@@ -102,12 +102,16 @@ header {
 
 header.toggle-header {
   -webkit-transform:translateY(-6rem);
+  -moz-transform:translateY(-6rem);
+  transform:translateY(-6rem);
   opacity:0;
   transition-duration:.5s;
 }
 
 .toggle-header + .spacer-top {
   margin-top: .5rem;
+  -moz-transition-duration:.5s;
+  -webkit-transition-duration:.5s;
   transition-duration:.5s;
 }
 
