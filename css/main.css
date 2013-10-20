@@ -235,18 +235,22 @@ small {
   }
 }
 
+[data-color] {
+ border-radius: 4px;
+}
+
 [data-color="red"] {
-  border-left:3px solid red;
+  border-right:3px solid red;
 }
 [data-color="green"] {
-  border-left:3px solid green;
+  border-right:3px solid green;
 }
 [data-color="blue"] {
-  border-left:3px solid blue;
+  border-right:3px solid blue;
 }
 [data-color="yellow"] {
-  border-left:3px solid yellow;
+  border-right:3px solid yellow;
 }
 [data-color="purple"] {
-  border-left:3px solid purple;
+  border-right:3px solid purple;
 }
