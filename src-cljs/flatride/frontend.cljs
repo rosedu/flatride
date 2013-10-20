@@ -21,6 +21,7 @@
           "center" latlng))
 
 (def stroke-colors ["red" "green" "blue" "yellow" "purple"])
+(def *directionDisplays* (atom []))
 
 (defn display-routes [routes-data]
   (doseq [route (:routes-data routes-data)]
@@ -43,17 +44,22 @@
             (js-obj "polylineOptions" (js-obj "strokeColor" (stroke-colors idx))))]
       (.setMap directionsDisplay *mapInstance*)
       (.setDirections directionsDisplay (:to-display routes-data))
-      (.setRouteIndex directionsDisplay idx))))
+      (.setRouteIndex directionsDisplay idx)
+      (swap! *directionDisplays* conj {:idx idx :obj directionsDisplay}))))
 
-(defn select-route [evt]
-  (log evt))
+(defn select-route [idx evt]
+  (when (> (count @*directionDisplays*) 1)
+    (let [obsolete-displays (map #(:obj %) (filter #(= (:idx %) idx) @*directionDisplays*))]
+      (doseq [display obsolete-displays]
+        (.setMap display nil))
+      (swap! *directionDisplays* (partial remove #(= (:idx %) idx))))))
 
 (defn display-elevations [{idx :idx
                            longest-slope :longest-slope
                            steepest-slope :steepest-slope}]
   (let [div (nth (sel :div.route-data) idx)]
     (dommy/set-attr! div "id" (str "route-" idx))
-    (dommy/listen! div :click select-route))
+    (dommy/listen! div :click (partial select-route idx)))
   (let [ul (nth (sel :ul.route-card) idx)]
     (dommy/append! ul (node [:li "The longest slope is "
                                   (->> longest-slope slope-percent (gstring/format "%.2f%%"))
