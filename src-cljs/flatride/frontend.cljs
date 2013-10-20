@@ -86,9 +86,18 @@
   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))    
     (.geocode geocoder (js-obj "latLng" latlng) fill-from-field)))
 
+(defn get-position-error []
+  "Handler Error in case of geolocation failure"
+   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) 
+        (js-obj 
+          "zoom" 14
+          "mapTypeId" window/google.maps.MapTypeId.ROADMAP
+          "disableDefaultUI" true
+          "center" (js/window.google.maps.LatLng. 64.135 -21.919)))))
+
 (defn init-current-position []
   "Get user current location for the _from_ field"
-  (.getCurrentPosition js/navigator.geolocation reverse-geocode))
+  (.getCurrentPosition js/navigator.geolocation reverse-geocode get-position-error))
 
 (defn hide-header-bar [e]
   (dommy/set-value! (or (.-target e) (.-srcElement e)) "")
