@@ -60,11 +60,29 @@
   (set! gautocomplete-from (window/google.maps.places.Autocomplete. (sel1 :#input-from)))
   (set! gautocomplete-to (window/google.maps.places.Autocomplete. (sel1 :#input-to))))
 
+(defn fill-from-field [results status]
+  (if (= status js/window.google.maps.GeocoderStatus.OK)
+    (dommy/set-value! (sel1 :#input-from) (.-formatted_address (nth results 1)))
+    (dommy/set-value! (sel1 :#input-from) "Type in your location")))
+
+(defn reverse-geocode [coords]
+  (let [lat (->> coords .-coords .-latitude)
+        lng (->> coords .-coords .-longitude)
+        geocoder (js/window.google.maps.Geocoder.)
+        latlng (js/window.google.maps.LatLng. lat lng)]
+    (.geocode geocoder (js-obj "latLng" latlng) fill-from-field)))
+
+(defn init-current-position []
+  "Get user current location for the _from_ field"
+  (.getCurrentPosition js/navigator.geolocation reverse-geocode))
+
 (def *mapInstance* nil)
+
 (defn init []
   (init-autocomplete)
   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj)))
-  (dommy/listen! (sel1 :#button-submit) :click get-routes))
+  (dommy/listen! (sel1 :#button-submit) :click get-routes)
+  (init-current-position))
 
 (set! (.-onload js/window) init)
 
