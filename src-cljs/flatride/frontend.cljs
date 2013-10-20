@@ -49,6 +49,7 @@
 (defn display-elevations [{idx :idx
                            longest-slope :longest-slope
                            steepest-slope :steepest-slope}]
+  (dommy/set-attr! (nth (sel :div.route-data) idx) "id" (str "route-" idx))
   (let [ul (nth (sel :ul.route-card) idx)]
     (dommy/append! ul (node [:li "The longest slope is "
                                   (->> longest-slope slope-percent (gstring/format "%.2f%%"))
