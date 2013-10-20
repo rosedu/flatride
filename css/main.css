@@ -190,3 +190,17 @@ small {
   100% {-webkit-transform: rotate(360deg);}
 }
 
+.fade-out {
+  -webkit-animation: .5s fadeout;
+  -webkit-animation-count: 1;
+  -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes fadeout {
+  50% {
+    opacity: 0
+  }
+  100% {
+    -webkit-transform:translateX(-100rem)
+  }
+}

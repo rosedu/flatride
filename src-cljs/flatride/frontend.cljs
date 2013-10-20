@@ -50,9 +50,14 @@
 (defn select-route [idx evt]
   (when (> (count @*directionDisplays*) 1)
     (let [obsolete-displays (map #(:obj %) (filter #(= (:idx %) idx) @*directionDisplays*))]
+      (doseq [loop-idx (range (count @*directionDisplays*))]
+        (when-not (= idx loop-idx)
+          (let [div (sel1 (keyword (str "#route-" loop-idx)))]
+            (dommy/add-class! div "fade-out"))))
       (doseq [display obsolete-displays]
         (.setMap display nil))
-      (swap! *directionDisplays* (partial remove #(= (:idx %) idx))))))
+      (swap! *directionDisplays* (partial remove #(= (:idx %) idx)))
+    )))
 
 (defn display-elevations [{idx :idx
                            longest-slope :longest-slope
