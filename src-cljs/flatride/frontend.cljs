@@ -97,7 +97,7 @@
   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))
     (.geocode geocoder (js-obj "latLng" latlng) fill-from-field)))
 
-(defn get-position-error []
+(defn get-position-error [code]
   "Handler Error in case of geolocation failure"
    (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas)
         (js-obj
