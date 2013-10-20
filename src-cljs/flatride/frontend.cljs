@@ -54,6 +54,7 @@
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
         to (dommy/value (sel1 :#input-to))]
+    (doall (map dommy/remove! (sel :div.route-data)))
     (core/start-compute-routes from to display-routes display-elevations :bike)))
 
 (defn init-autocomplete []
