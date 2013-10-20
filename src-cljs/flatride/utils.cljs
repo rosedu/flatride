@@ -16,17 +16,12 @@
         lat1 (toRad (:lat from))
         lat2 (toRad (:lat to))
         a (+ (* (Math/sin (/ dLat 2))
-                (Math/sin (/ dLat 2))
-              )
-             (*
-                (Math/sin (/ dLon 2))
+                (Math/sin (/ dLat 2)))
+             (* (Math/sin (/ dLon 2))
                 (Math/sin (/ dLon 2))
                 (Math/cos lat1)
-                (Math/cos lat2)
-              ))
-        c (* 2
-             (Math/atan2 (Math/sqrt a) (Math/sqrt (- 1 a))))
-        ]
+                (Math/cos lat2)))
+        c (* 2 (Math/atan2 (Math/sqrt a) (Math/sqrt (- 1 a))))]
     (* R c)))
 
 (defn slope-total-distance [elev-objs]
