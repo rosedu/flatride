@@ -59,7 +59,6 @@
                             (partial process-elevation-data display-elev-fn idx))))
 
 (defn parse-route [route]
-  ;; route.legs[0].distance // .duration
   (let [route-info (nth (.-legs route) 0)]
     {:distance (->> route-info .-distance .-text)
      :duration (->> route-info .-duration .-text)}))
