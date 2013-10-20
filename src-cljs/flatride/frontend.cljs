@@ -54,7 +54,7 @@
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
         to (dommy/value (sel1 :#input-to))]
-    (core/start-compute-routes from to display-routes display-elevations)))
+    (core/start-compute-routes from to display-routes display-elevations :bike)))
 
 (defn init-autocomplete []
   (set! gautocomplete-from (window/google.maps.places.Autocomplete. (sel1 :#input-from)))

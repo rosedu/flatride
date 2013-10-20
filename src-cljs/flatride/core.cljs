@@ -6,14 +6,20 @@
     [dommy.core :as dommy]))
 
 
-(defn directions-config-obj [from to]
-  (js-obj "origin" from
-          "destination" to
-          "provideRouteAlternatives" true
-          "travelMode" window/google.maps.DirectionsTravelMode.DRIVING))
+(defn directions-config-obj [from to mode]
+  (let [cfg-obj (js-obj "origin" from
+                        "destination" to
+                        "provideRouteAlternatives" true)]
+    (if (= :drive mode)
+      (set! (.-travelMode cfg-obj) window/google.maps.DirectionsTravelMode.DRIVING)
+      (set! (.-travelMode cfg-obj) window/google.maps.DirectionsTravelMode.BICYCLING))
+    cfg-obj))
 
-(defn start-compute-routes [from to display-route-fn display-elev-fn]
-  (let [req-obj (directions-config-obj from to)
+(def *compute-routes-args* nil)
+
+(defn start-compute-routes [from to display-route-fn display-elev-fn mode]
+  (set! *compute-routes-args* [from to display-route-fn display-elev-fn])
+  (let [req-obj (directions-config-obj from to mode)
         ds (window/google.maps.DirectionsService.)]
     (.route ds req-obj (partial process-routes display-route-fn display-elev-fn))))
 
@@ -63,8 +69,12 @@
      :duration (->> route-info .-duration .-text)}))
 
 (defn process-routes [display-route-fn display-elev-fn routes status]
-  (doseq [idx (range (->> routes .-routes .-length))]
-    (start-compute-elevation-data (nth (.-routes routes) idx) idx display-elev-fn))
-  (display-route-fn {:to-display routes
-                     :routes-data (map parse-route (.-routes routes))}))
+  (let [num-routes (->> routes .-routes .-length)]
+    (if (= num-routes 0)
+      (apply start-compute-routes (conj *compute-routes-args* :drive))
+      (do
+        (doseq [idx (range (->> routes .-routes .-length))]
+          (start-compute-elevation-data (nth (.-routes routes) idx) idx display-elev-fn))
+        (display-route-fn {:to-display routes
+                           :routes-data (map parse-route (.-routes routes))})))))
 
