@@ -74,12 +74,12 @@
                                   (->> longest-slope slope-percent (gstring/format "%.2f%%"))
                                   " for a distance of "
                                   (->> longest-slope slope-total-distance (gstring/format "%.2f"))
-                                  "m"]))
+                                  "km"]))
     (dommy/append! ul (node [:li "The steepest slope is "
                                 (->> steepest-slope slope-percent (gstring/format "%.2f%%"))
                                 " for a distance of "
                                 (->> steepest-slope slope-total-distance (gstring/format "%.2f"))
-                                "m"]))))
+                                "km"]))))
 
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
