@@ -20,7 +20,7 @@
           "disableDefaultUI" true
           "center" (window/google.maps.LatLng. 45 45)))
 
-(def stroke-colors ["red" "green" "blue"])
+(def stroke-colors ["red" "green" "blue" "yellow" "purple"])
 
 (defn display-routes [routes-data]
   (doseq [route (:routes-data routes-data)]
