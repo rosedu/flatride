@@ -16,6 +16,7 @@
 (defn map-config-obj []
   (js-obj "zoom" 12
           "mapTypeId" window/google.maps.MapTypeId.ROADMAP
+          "disableDefaultUI" true
           "center" (window/google.maps.LatLng. 45 45)))
 
 (def stroke-colors ["red" "green" "blue"])
