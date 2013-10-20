@@ -66,7 +66,8 @@
 (defn parse-route [route]
   (let [route-info (nth (.-legs route) 0)]
     {:distance (->> route-info .-distance .-text)
-     :duration (->> route-info .-duration .-text)}))
+     :duration (->> route-info .-duration .-text)
+     :summary (.-summary route)}))
 
 (defn process-routes [display-route-fn display-elev-fn routes status]
   (let [num-routes (->> routes .-routes .-length)]

@@ -9,9 +9,6 @@ body {
   height: 400px;
 }
 
-form {
-}
-
 .input-userlocation {
   font-size: 1.5rem;
   width: 100%;
@@ -47,7 +44,7 @@ form {
 
 .title-logo {
   letter-spacing: -5px;
-  font-size: 5rem;
+  font-size: 4rem;
   margin: 0;
   padding:0;
 }
@@ -121,4 +118,28 @@ header.toggle-header {
 
 .pac-container + .pac-container {
   top: 100px !important;
+}
+
+.icon-time {
+  width: 20px;
+  margin: 0 20px;
+  margin-left: 15px;
+}
+
+.icon-distance {
+  width: 50px;
+  margin-right: 5px;
+}
+
+hr {
+  margin:.5rem 0;
+  background: none;
+  border:0;
+  border-bottom:1px solid #eee;
+}
+
+small {
+  font-size: .9rem;
+  color: #aaa;
+  margin: .4rem 0;
 }

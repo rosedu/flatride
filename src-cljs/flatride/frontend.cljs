@@ -23,13 +23,20 @@
 (def stroke-colors ["red" "green" "blue" "yellow" "purple"])
 
 (defn display-routes [routes-data]
+  (log routes-data)
   (doseq [route (:routes-data routes-data)]
     (dommy/append! (sel1 :#div-routes-display)
                    (node [:div.route-data
                           [:ul.route-card
-                           [:li.card-title "Distance "
+                           [:li.card-title
+                                [:img {:src "img/distance.png" :class "icon-distance"}]
                                 (:distance route)
-                                " for a total of " (:duration route)]]])))
+                                [:br]
+                                [:img {:src "img/time.svg" :class "icon-time"}]
+                                (:duration route)
+                                [:br]]
+                            [:small " via " (:summary route)]
+                            [:hr]]])))
 
   ; plot the directions on the map
   (doseq [idx (range (->> (:to-display routes-data) .-routes .-length))]
@@ -42,15 +49,18 @@
 (defn display-elevations [{idx :idx
                            longest-slope :longest-slope
                            steepest-slope :steepest-slope}]
+  (dommy/set-attr! (nth (sel :div.route-data) idx) "id" (str "route-" idx))
   (let [ul (nth (sel :ul.route-card) idx)]
-    (dommy/append! ul (node [:li [:strong "longest slope"]
-                             [:ul
-                              [:li [:strong "slope"] (->> longest-slope slope-percent (gstring/format "%.2f%%"))]
-                              [:li [:strong "distance"] (->> longest-slope slope-total-distance (gstring/format "%.2f"))]]]))
-    (dommy/append! ul (node [:li [:strong "steepest slope"]
-                             [:ul
-                              [:li [:strong "slope"] (->> steepest-slope slope-percent (gstring/format "%.2f%%"))]
-                              [:li [:strong "distance"] (->> steepest-slope slope-total-distance (gstring/format "%.2f"))]]]))))
+    (dommy/append! ul (node [:li "The longest slope is "
+                                  (->> longest-slope slope-percent (gstring/format "%.2f%%"))
+                                  " for a distance of "
+                                  (->> longest-slope slope-total-distance (gstring/format "%.2f"))
+                                  "m"]))
+    (dommy/append! ul (node [:li "The steepest slope is "
+                                (->> steepest-slope slope-percent (gstring/format "%.2f%%"))
+                                " for a distance of "
+                                (->> steepest-slope slope-total-distance (gstring/format "%.2f"))
+                                "m"]))))
 
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
@@ -74,12 +84,21 @@
         lng (->> coords .-coords .-longitude)
         geocoder (js/window.google.maps.Geocoder.)
         latlng (js/window.google.maps.LatLng. lat lng)]
-  (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))    
+  (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))
     (.geocode geocoder (js-obj "latLng" latlng) fill-from-field)))
+
+(defn get-position-error []
+  "Handler Error in case of geolocation failure"
+   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas)
+        (js-obj
+          "zoom" 14
+          "mapTypeId" window/google.maps.MapTypeId.ROADMAP
+          "disableDefaultUI" true
+          "center" (js/window.google.maps.LatLng. 64.135 -21.919)))))
 
 (defn init-current-position []
   "Get user current location for the _from_ field"
-  (.getCurrentPosition js/navigator.geolocation reverse-geocode))
+  (.getCurrentPosition js/navigator.geolocation reverse-geocode get-position-error))
 
 (defn hide-header-bar [e]
   (dommy/set-value! (or (.-target e) (.-srcElement e)) "")
