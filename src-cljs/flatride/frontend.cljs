@@ -82,7 +82,7 @@
   (.getCurrentPosition js/navigator.geolocation reverse-geocode))
 
 (defn hide-header-bar [e]
-  (dommy/set-value! (.-srcElement e) "")
+  (dommy/set-value! (or (.-target e) (.-srcElement e)) "")
   (dommy/add-class! (sel1 :header) "toggle-header"))
 
 (defn init []
