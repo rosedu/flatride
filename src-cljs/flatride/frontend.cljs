@@ -27,8 +27,9 @@
     (dommy/append! (sel1 :#div-routes-display)
                    (node [:div.route-data
                           [:ul.route-card
-                           [:li [:strong "distance"] (:distance route)]
-                           [:li [:strong "duration"] (:duration route)]]])))
+                           [:li.card-title "Distance "
+                                (:distance route)
+                                " for a total of " (:duration route)]]])))
 
   ; plot the directions on the map
   (doseq [idx (range (->> (:to-display routes-data) .-routes .-length))]

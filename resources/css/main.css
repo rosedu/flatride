@@ -68,3 +68,8 @@ body {
   margin: .1rem;
   padding: .1rem;
 }
+
+.card-title {
+  font-size: 1.5rem;
+  color: #63D3FF;
+}
