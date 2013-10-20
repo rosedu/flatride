@@ -28,7 +28,7 @@
   (filter #(> (count %) 1)
           (reductions
             (fn [current-seq next-elem]
-              (if (>= (:altitude next-elem) (:altitude (last current-seq)))
+              (if (>= (+ (:altitude next-elem) 10) (:altitude (last current-seq)))
                 (conj current-seq next-elem)
                 [next-elem]))
             [(first coll)]
@@ -58,7 +58,7 @@
 
 (defn start-compute-elevation-data [route idx display-elev-fn]
   (let [es (window/google.maps.ElevationService.)
-        path-req (js-obj "path" (.-overview_path route) "samples" 100)]
+        path-req (js-obj "path" (.-overview_path route) "samples" 300)]
     (.getElevationAlongPath es
                             path-req
                             (partial process-elevation-data display-elev-fn idx))))
