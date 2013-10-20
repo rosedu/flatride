@@ -83,7 +83,7 @@
         lng (->> coords .-coords .-longitude)
         geocoder (js/window.google.maps.Geocoder.)
         latlng (js/window.google.maps.LatLng. lat lng)]
-  (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))    
+  (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))
     (.geocode geocoder (js-obj "latLng" latlng) fill-from-field)))
 
 (defn init-current-position []
