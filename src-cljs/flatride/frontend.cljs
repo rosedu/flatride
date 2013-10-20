@@ -10,15 +10,15 @@
         [goog.string.format]
         [dommy.core :as dommy]))
 
-
 (def gautocomplete-from nil)
 (def gautocomplete-to nil)
+(def *mapInstance* nil)
 
-(defn map-config-obj []
-  (js-obj "zoom" 12
+(defn map-config-obj [latlng]
+  (js-obj "zoom" 14
           "mapTypeId" window/google.maps.MapTypeId.ROADMAP
           "disableDefaultUI" true
-          "center" (window/google.maps.LatLng. 45 45)))
+          "center" latlng))
 
 (def stroke-colors ["red" "green" "blue"])
 
@@ -61,26 +61,27 @@
   (set! gautocomplete-to (window/google.maps.places.Autocomplete. (sel1 :#input-to))))
 
 (defn fill-from-field [results status]
+  "Fill input from field with human readable address"
   (if (= status js/window.google.maps.GeocoderStatus.OK)
     (dommy/set-value! (sel1 :#input-from) (.-formatted_address (nth results 1)))
     (dommy/set-value! (sel1 :#input-from) "Type in your location")))
 
 (defn reverse-geocode [coords]
+  "Convert geolocation coords to human readable"
   (let [lat (->> coords .-coords .-latitude)
         lng (->> coords .-coords .-longitude)
         geocoder (js/window.google.maps.Geocoder.)
         latlng (js/window.google.maps.LatLng. lat lng)]
+  (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))    
     (.geocode geocoder (js-obj "latLng" latlng) fill-from-field)))
 
 (defn init-current-position []
   "Get user current location for the _from_ field"
   (.getCurrentPosition js/navigator.geolocation reverse-geocode))
 
-(def *mapInstance* nil)
 
 (defn init []
   (init-autocomplete)
-  (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj)))
   (dommy/listen! (sel1 :#button-submit) :click get-routes)
   (init-current-position))
 
