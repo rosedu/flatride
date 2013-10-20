@@ -10,20 +10,19 @@
     <body>
 
       <div class="row">
-        <div class="large-9 large-centered text-centered columns">
+        <form>
+        <header>
           <img src="img/bike.svg" class="img-logo">
           <h1 class="title-logo">Flatride</h1>
-        </div>
-        <div class="small-12 large-9 small-centered large-centered columns">
-          <input id="input-from" value="Politehnica, Iuliu Maniu Avenue, Bucharest, Romania" class="input-userlocation">
-        </div>
-        <div class="small-12 small-centered large-9 large-centered columns">
+        </header>
+
+        <div class="small-12 large-9 large-centered columns spacer-top">
+          <input id="input-from" value="Politehnica, Iuliu Maniu Avenue, Bucharest, Romania" class="input-userlocation"> 
           <input id="input-to" value="Brăila, Romania" class="input-userlocation">
-        </div>
-        <div class="small-12 small-centered large-9 large-centered columns">
           <button id="button-submit" class="large button expand">Ride!</button>
         </div>
-
+      </form>
+        
         <div class="small-12 large-9 small-centered large-centered columns">
         <div id="div-map-canvas" class="google-map">
         </div>

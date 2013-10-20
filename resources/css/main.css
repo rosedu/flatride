@@ -7,13 +7,15 @@ body {
 .google-map {
   width: 100%;
   height: 500px;
-  border:1px solid #ddd;
-  box-shadow: 0 2px 2px #ccc;
+}
+
+form {
 }
 
 .input-userlocation {
   font-size: 1.5rem;
   width: 100%;
+  max-width: 62.5em;
   border:1px solid #ddd;
   padding: .4rem;
   box-shadow:inset 0 1px 3px #ddd;
@@ -72,4 +74,47 @@ body {
 .card-title {
   font-size: 1.5rem;
   color: #63D3FF;
+}
+
+
+.eye-candy,
+.route-card,
+.google-map,
+.input-userlocation,
+.button {
+  box-shadow: 0 2px 2px #ccc;
+  border-radius: 3px;  
+  border:1px solid #ddd; 
+  border-bottom:1px solid #bbb;  
+}
+
+header {
+  position: absolute;
+  top: 0;
+  left:0;
+  right:0;
+  text-align: center;
+}
+
+.spacer-top {
+  margin-top:5.5rem;
+}
+
+header.toggle-header {
+  -webkit-transform:translateY(-6rem);
+  opacity:0;
+  transition-duration:.5s;
+}
+
+.toggle-header + .spacer-top {
+  margin-top: .5rem;
+  transition-duration:.5s;
+}
+
+.pac-container {
+  top: 50px !important;
+}
+
+.pac-container + .pac-container {
+  top: 100px !important;
 }

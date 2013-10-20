@@ -81,11 +81,16 @@
   "Get user current location for the _from_ field"
   (.getCurrentPosition js/navigator.geolocation reverse-geocode))
 
+(defn hide-header-bar [e]
+  (dommy/set-value! (.-srcElement e) "")
+  (dommy/add-class! (sel1 :header) "toggle-header"))
 
 (defn init []
   (init-autocomplete)
   (dommy/listen! (sel1 :#button-submit) :click get-routes)
-  (init-current-position))
+  (init-current-position)
+  (dommy/listen! (sel1 :#input-from) :focus hide-header-bar)
+  (dommy/listen! (sel1 :#input-to) :focus hide-header-bar))
 
 (set! (.-onload js/window) init)
 
