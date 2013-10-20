@@ -21,12 +21,15 @@
           "center" latlng))
 
 (def stroke-colors ["red" "green" "blue" "yellow" "purple"])
+(def *directionDisplays* (atom []))
+
+(def *counter* (atom 0))
 
 (defn display-routes [routes-data]
-  (log routes-data)
+  (reset! *counter* 0)
   (doseq [route (:routes-data routes-data)]
     (dommy/append! (sel1 :#div-routes-display)
-                   (node [:div.route-data
+                   (node [:div.route-data {:data-color (stroke-colors @*counter*)}
                           [:ul.route-card
                            [:li.card-title
                                 [:img {:src "img/distance.png" :class "icon-distance"}]
@@ -36,7 +39,8 @@
                                 (:duration route)
                                 [:br]]
                             [:small " via " (:summary route)]
-                            [:hr]]])))
+                            [:hr]]]))
+    (swap! *counter* inc))
 
   ; plot the directions on the map
   (doseq [idx (range (->> (:to-display routes-data) .-routes .-length))]
@@ -44,23 +48,38 @@
             (js-obj "polylineOptions" (js-obj "strokeColor" (stroke-colors idx))))]
       (.setMap directionsDisplay *mapInstance*)
       (.setDirections directionsDisplay (:to-display routes-data))
-      (.setRouteIndex directionsDisplay idx))))
+      (.setRouteIndex directionsDisplay idx)
+      (swap! *directionDisplays* conj {:idx idx :obj directionsDisplay}))))
+
+(defn select-route [idx evt]
+  (when (> (count @*directionDisplays*) 1)
+    (let [obsolete-displays (map #(:obj %) (filter #(not= (:idx %) idx) @*directionDisplays*))]
+      (doseq [loop-idx (range (count @*directionDisplays*))]
+        (when-not (= idx loop-idx)
+          (let [div (sel1 (keyword (str "#route-" loop-idx)))]
+            (dommy/add-class! div "fade-out"))))
+      (doseq [display obsolete-displays]
+        (.setMap display nil))
+      (swap! *directionDisplays* (partial remove #(= (:idx %) idx)))
+    )))
 
 (defn display-elevations [{idx :idx
                            longest-slope :longest-slope
                            steepest-slope :steepest-slope}]
-  (dommy/set-attr! (nth (sel :div.route-data) idx) "id" (str "route-" idx))
+  (let [div (nth (sel :div.route-data) idx)]
+    (dommy/set-attr! div "id" (str "route-" idx))
+    (dommy/listen! div :click (partial select-route idx)))
   (let [ul (nth (sel :ul.route-card) idx)]
     (dommy/append! ul (node [:li "The longest slope is "
                                   (->> longest-slope slope-percent (gstring/format "%.2f%%"))
                                   " for a distance of "
                                   (->> longest-slope slope-total-distance (gstring/format "%.2f"))
-                                  "m"]))
+                                  "km"]))
     (dommy/append! ul (node [:li "The steepest slope is "
                                 (->> steepest-slope slope-percent (gstring/format "%.2f%%"))
                                 " for a distance of "
                                 (->> steepest-slope slope-total-distance (gstring/format "%.2f"))
-                                "m"]))))
+                                "km"]))))
 
 (defn get-routes []
   (let [from (dommy/value (sel1 :#input-from))
@@ -87,7 +106,7 @@
   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))
     (.geocode geocoder (js-obj "latLng" latlng) fill-from-field)))
 
-(defn get-position-error []
+(defn get-position-error [code]
   "Handler Error in case of geolocation failure"
    (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas)
         (js-obj
