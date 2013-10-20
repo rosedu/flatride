@@ -23,10 +23,13 @@
 (def stroke-colors ["red" "green" "blue" "yellow" "purple"])
 (def *directionDisplays* (atom []))
 
+(def *counter* (atom 0))
+
 (defn display-routes [routes-data]
+  (reset! *counter* 0)
   (doseq [route (:routes-data routes-data)]
     (dommy/append! (sel1 :#div-routes-display)
-                   (node [:div.route-data
+                   (node [:div.route-data {:data-color (stroke-colors @*counter*)}
                           [:ul.route-card
                            [:li.card-title
                                 [:img {:src "img/distance.png" :class "icon-distance"}]
@@ -36,7 +39,8 @@
                                 (:duration route)
                                 [:br]]
                             [:small " via " (:summary route)]
-                            [:hr]]])))
+                            [:hr]]]))
+    (swap! *counter* inc))
 
   ; plot the directions on the map
   (doseq [idx (range (->> (:to-display routes-data) .-routes .-length))]
@@ -49,7 +53,7 @@
 
 (defn select-route [idx evt]
   (when (> (count @*directionDisplays*) 1)
-    (let [obsolete-displays (map #(:obj %) (filter #(= (:idx %) idx) @*directionDisplays*))]
+    (let [obsolete-displays (map #(:obj %) (filter #(not= (:idx %) idx) @*directionDisplays*))]
       (doseq [loop-idx (range (count @*directionDisplays*))]
         (when-not (= idx loop-idx)
           (let [div (sel1 (keyword (str "#route-" loop-idx)))]
