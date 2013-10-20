@@ -82,6 +82,7 @@
                                 "km"]))))
 
 (defn get-routes []
+  (dommy/add-class! (sel1 :header) "toggle-header")
   (let [from (dommy/value (sel1 :#input-from))
         to (dommy/value (sel1 :#input-to))]
     (doall (map dommy/remove! (sel :div.route-data)))
