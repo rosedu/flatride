@@ -61,10 +61,8 @@
 (defn parse-route [route]
   ;; route.legs[0].distance // .duration
   (let [route-info (nth (.-legs route) 0)]
-    {
-     :distance (->> route-info .-distance .-text)
-     :duration (->> route-info .-duration .-text)
-     }))
+    {:distance (->> route-info .-distance .-text)
+     :duration (->> route-info .-duration .-text)}))
 
 (defn process-routes [display-route-fn display-elev-fn routes status]
   (doseq [idx (range (->> routes .-routes .-length))]
