@@ -8,7 +8,7 @@
               :builds [{
                         :source-paths ["src-cljs"]
                         :compiler {
-                                   :output-to "resources/js/main.js"
+                                   :output-to "main.js"
                                    :optimizations :whitespace
                                    :pretty-print true}}]}
 
