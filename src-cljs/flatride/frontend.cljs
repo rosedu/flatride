@@ -87,10 +87,10 @@
   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) (map-config-obj latlng)))
     (.geocode geocoder (js-obj "latLng" latlng) fill-from-field)))
 
-(defn get-position-error []
+(defn get-position-error [c]
   "Handler Error in case of geolocation failure"
-   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas) 
-        (js-obj 
+   (set! *mapInstance* (window/google.maps.Map. (sel1 :#div-map-canvas)
+        (js-obj
           "zoom" 14
           "mapTypeId" window/google.maps.MapTypeId.ROADMAP
           "disableDefaultUI" true
