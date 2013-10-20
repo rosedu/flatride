@@ -46,8 +46,7 @@
         slopes (increasing-seqs elev-objs)
         longest-slope (longest-seq slopes)
         steepest-slope (greatest-diff-seq slopes)]
-    (display-elev-fn {
-                      :idx idx
+    (display-elev-fn {:idx idx
                       :longest-slope longest-slope
                       :steepest-slope steepest-slope})))
 
@@ -66,7 +65,6 @@
 (defn process-routes [display-route-fn display-elev-fn routes status]
   (doseq [idx (range (->> routes .-routes .-length))]
     (start-compute-elevation-data (nth (.-routes routes) idx) idx display-elev-fn))
-  (display-route-fn {
-               :to-display routes
-               :routes-data (map parse-route (.-routes routes))}))
+  (display-route-fn {:to-display routes
+                     :routes-data (map parse-route (.-routes routes))}))
 
