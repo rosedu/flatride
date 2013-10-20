@@ -60,6 +60,10 @@ body {
   border:1px solid #ddd;
   border-bottom:1px solid #bbb;
   box-shadow: 0 2px 2px #ccc;
+  cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -user-select: none;
 }
 
 .route-card li {

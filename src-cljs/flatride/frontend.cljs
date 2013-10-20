@@ -46,10 +46,15 @@
       (.setDirections directionsDisplay (:to-display routes-data))
       (.setRouteIndex directionsDisplay idx))))
 
+(defn select-route [evt]
+  (log evt))
+
 (defn display-elevations [{idx :idx
                            longest-slope :longest-slope
                            steepest-slope :steepest-slope}]
-  (dommy/set-attr! (nth (sel :div.route-data) idx) "id" (str "route-" idx))
+  (let [div (nth (sel :div.route-data) idx)]
+    (dommy/set-attr! div "id" (str "route-" idx))
+    (dommy/listen! div :click select-route))
   (let [ul (nth (sel :ul.route-card) idx)]
     (dommy/append! ul (node [:li "The longest slope is "
                                   (->> longest-slope slope-percent (gstring/format "%.2f%%"))
