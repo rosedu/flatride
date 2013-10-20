@@ -234,3 +234,19 @@ small {
     -webkit-transform:translateX(-100rem)
   }
 }
+
+[data-color="red"] {
+  border-left:3px solid red;
+}
+[data-color="green"] {
+  border-left:3px solid green;
+}
+[data-color="blue"] {
+  border-left:3px solid blue;
+}
+[data-color="yellow"] {
+  border-left:3px solid yellow;
+}
+[data-color="purple"] {
+  border-left:3px solid purple;
+}
