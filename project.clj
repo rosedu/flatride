@@ -9,7 +9,7 @@
                         :source-paths ["src-cljs"]
                         :compiler {
                                    :output-to "js/main.js"
-                                   :optimizations :whitespace
+                                   :optimizations :advanced
                                    :pretty-print true}}]}
 
   :dependencies [[org.clojure/clojure "1.5.1"]
