@@ -23,7 +23,6 @@
 (def stroke-colors ["red" "green" "blue" "yellow" "purple"])
 
 (defn display-routes [routes-data]
-  (log routes-data)
   (doseq [route (:routes-data routes-data)]
     (dommy/append! (sel1 :#div-routes-display)
                    (node [:div.route-data
